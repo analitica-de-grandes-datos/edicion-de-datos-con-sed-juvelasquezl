@@ -41,3 +41,29 @@
 #
 #  >>> Escriba su codigo a partir de este punto <<<
 #
+##agrego el cero a los días y meses de un digito
+sed 's/^\([0-9]\)\//0\1+/g' data.csv > data1.tmp 
+sed 's/+/\//' data1.tmp > data2.tmp 
+sed 's/\/\([0-9]\)\//\/0\1+/g' data2.tmp > data3.tmp 
+sed 's/+/\//' data3.tmp > data4.tmp 
+sed 's/\//-/g' data4.tmp > data5.tmp 
+##agrego el 20 a los años que tienen 2 dígitos
+sed 's/-\([1-9]\)\([1-9]\);/-20\1\2;/' data5.tmp > data6.tmp 
+##cambiar el orden a YYYY-MM-DD
+sed 's/^\([0-9]\)\([0-9]\)-\([0-9]\)\([0-9]\)-\([0-9]\)\([0-9]\)\([0-9]\)\([0-9]\);/\5\6\7\8-\3\4-\1\2;/' data6.tmp > data7.tmp 
+##decimales con .
+sed 's/,/./g' data7.tmp > data8.tmp 
+##Remplazo ; por ,
+sed 's/;/,/g' data8.tmp > data9.tmp 
+##cambiar todos los nulos a \N
+sed 's/\,n/\,\N/g' data9.tmp > data10.tmp 
+sed 's/\\n/\N/g' data10.tmp > data11.tmp 
+sed 's/\,,/\,\N\,/g' data11.tmp > data12.tmp 
+sed 's/\,N/\,\\N/g' data12.tmp > data13.tmp 
+sed '5 s/\,/\,\\N/3' data13.tmp > data14.tmp 
+sed '7 s/\,/\,\\N/3' data14.tmp > data15.tmp 
+##minusculas por mayusculas
+sed 's/a/A/g' data15.tmp > data16.tmp 
+sed 's/c/C/g' data16.tmp > output.csv
+cat output.csv
+rm *.tmp
